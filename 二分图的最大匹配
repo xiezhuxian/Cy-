@@ -1,0 +1,55 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+const int N=1e6;
+int e[N];
+int ne[N];
+int n,m,h[N],k;
+long long ans=0;
+int cnt;
+int idx;
+int vis[N];
+int match[N];
+void add(int a,int b)
+{
+    e[idx]=b;
+    ne[idx]=h[a];
+    h[a]=idx++;
+}
+bool dfs(int u)
+{
+    for(int i=h[u];i!=-1;i=ne[i])
+    {
+        int v=e[i];
+        if(vis[v]) continue;
+        vis[v]=1;
+        if(!match[v]||dfs(match[v]))
+        {
+            match[v]=u;
+            return true;
+        }
+    }
+    return false;
+}
+int main(){
+    cin >> n >> m >> k;
+    memset(h,-1,sizeof(h));
+    for(int i=0;i<k;i++)
+    {
+        int a,b;
+        cin >> a >> b;
+        add(a,b);
+    }
+    int flag=0;
+    for(int i=1;i<=n;i++)
+    {
+        memset(vis,0,sizeof vis);
+        if(dfs(i))
+        {
+            ans++;
+        }
+    }
+    cout << ans << "\n";
+    return 0;
+}
