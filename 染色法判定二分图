@@ -1,0 +1,70 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+const int N=1e6;
+int e[N];
+int ne[N];
+int n,m,h[N];
+long long ans=0;
+int cnt;
+int idx;
+int color[N];
+void add(int a,int b)
+{
+    e[idx]=b;
+    ne[idx]=h[a];
+    h[a]=idx++;
+}
+bool dfs(int u,int c)
+{
+    color[u]=c;
+    for(int i=h[u];i!=-1;i=ne[i])
+    {
+        int v=e[i];
+        if(!color[v])
+        {
+            if(dfs(v,3-c))
+            {
+                return true;
+            }
+        }
+        else if(color[v]==c)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+int main(){
+    cin >> n >> m;
+    memset(h,-1,sizeof(h));
+    for(int i=0;i<m;i++)
+    {
+        int a,b;
+        cin >> a >> b;
+        add(a,b);
+        add(b,a);
+    }
+    int flag=0;
+    for(int i=1;i<=n;i++)
+    {
+        if(!color[i])
+        {
+            if(dfs(i,1))
+            {
+                flag=1;
+                break;
+            }
+        }
+    }
+    if(flag)
+    {
+        cout << "No" << "\n";
+    }
+    else
+    {
+        cout << "Yes" << "\n";
+    }
+    return 0;
+}
