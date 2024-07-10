@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <queue>
+#include <vector>
+#include <set>
+#include <cmath>
+using namespace std;
+const int N=1e6+10;
+int n,m,s;
+int e[N],h[N],ne[N],idx,w[N];
+int vis[N];
+int d[N];
+void add(int x,int y,int z)
+{
+    e[idx]=y;
+    w[idx]=z;
+    ne[idx]=h[x];
+    h[x]=idx++;
+}
+void dilkstra(int s)
+{
+    memset(d,0x3f,sizeof d);
+    d[s]=0;
+    for(int i=0;i<n;i++)
+    {
+        int u=0;
+        for(int j=1;j<=n;j++)
+        {
+            if(!vis[j]&&d[j]<d[u])
+            {
+                u=j;
+            }
+        }
+        vis[u]=1;
+        for(int j=h[u];j!=-1;j=ne[j])
+        {
+            int t=e[j];
+            if(!vis[t]&&d[t]>d[u]+w[j])
+            {
+                d[t]=d[u]+w[j];
+            }
+        }
+    }
+}
+int main()
+{
+    cin >> n >> m;
+    memset(h,-1,sizeof(h));
+    for(int i=0;i<m;i++)
+    {
+        int a,b,c;
+        cin >> a >> b >> c;
+        add(a,b,c);
+    }
+    dilkstra(1);
+    if(d[n]!=0x3f3f3f3f)
+    {
+        cout << d[n] << "\n";
+    }
+    else
+    {
+        cout << "-1" << "\n";
+    }
+    return 0;
+}
+
