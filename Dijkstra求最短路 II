@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <queue>
+#include <vector>
+#include <set>
+using namespace std;
+const int N=1e6+10;
+typedef pair<int,int> pii;
+int e[N],w[N],ne[N],idx,h[N];
+int n,m;
+int d[N];
+int vis[N];
+
+void add(int a,int b,int c)
+{
+    e[idx]=b;
+    w[idx]=c;
+    ne[idx]=h[a];
+    h[a]=idx++;
+}
+void dilkstra()
+{
+    memset(d,0x3f3f,sizeof(d));
+    d[1]=0;
+    priority_queue<pii,vector<pii>,greater<pii>> headp;
+    headp.push({0,1});
+    while(headp.size())
+    {
+        auto v=headp.top();
+        int distance=v.first;
+        int ver=v.second;
+        headp.pop();
+        if(vis[ver])
+        {
+            continue;
+        }
+        vis[ver]=1;
+        for(int i=h[ver];i!=-1;i=ne[i])
+        {
+            int j=e[i];
+            if(d[j]>distance+w[i])
+            {
+                d[j]=distance+w[i];
+                headp.push({d[j],j});
+            }
+        }
+    }
+    
+}
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    cin >> n >> m;
+    memset(h,-1,sizeof(h));
+    for(int i=1;i<=m;i++)
+    {
+        int x,y,z;
+        cin >> x >> y >> z;
+        add(x,y,z);
+    }
+    dilkstra();
+    if(d[n]!=0x3f3f3f3f)
+    {
+        cout << d[n] << "\n";
+    }
+    else
+    {
+        cout << "-1" << "\n";
+    }
+    return 0;
+}
+
