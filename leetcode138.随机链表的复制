@@ -1,0 +1,55 @@
+/**
+ * Definition for a Node.
+ * struct Node {
+ *     int val;
+ *     struct Node *next;
+ *     struct Node *random;
+ * };
+ */
+typedef struct Node Node;
+Node* buyNode(int x)
+{
+    Node* newnode=(Node*)malloc(sizeof(Node));
+    newnode->val=x;
+    newnode->next=newnode->random=NULL;
+    return newnode;
+}
+void AddNode(Node* phead)
+{
+    Node* pcur=phead;
+    while(pcur)
+    {
+        Node* Next=pcur->next;
+        Node* newnode=buyNode(pcur->val);
+        pcur->next=newnode;
+        newnode->next=Next;
+        pcur=Next;
+    }
+}
+struct Node* copyRandomList(struct Node* head) {
+	if(head==NULL)
+    {
+        return NULL;
+    }
+    AddNode(head);
+    Node* pcur=head;
+    while(pcur)
+    {
+        Node* copy=pcur->next;
+        if(pcur->random!=NULL)
+        {
+            copy->random=pcur->random->next;
+        }
+        pcur=copy->next;
+    }
+    pcur=head;
+    Node* newHead,*newTail;
+    newHead=newTail=pcur->next;
+    while(pcur->next->next)
+    {
+        pcur=pcur->next->next;
+        newTail->next=pcur->next;
+        newTail=newTail->next;
+    }
+    return newHead;
+}
