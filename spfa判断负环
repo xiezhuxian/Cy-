@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <cstring>
+#include <queue>
+#include <vector>
+#include <set>
+using namespace std;
+const int N=1e6;
+int e[N],ne[N],idx,h[N],w[N];
+void add(int x,int y,int z)
+{
+    e[idx]=y;
+    w[idx]=z;
+    ne[idx]=h[x];
+    h[x]=idx++;
+}
+int n,m,k;
+int d[N];
+int vis[N];
+int cnt[N];
+int inf=1e9;
+bool spfa() {
+    memset(d, inf, sizeof d);
+    for(int i=1;i<=n;i++)
+    {
+        d[i]=1;
+    }
+    bool flag;
+    for(int i=1;i<=n;i++)
+    {
+        flag=false;
+        for(int j=1;j<=n;j++)
+        {
+            if(d[j]==inf)
+            {
+                continue;
+            }
+            for(int l=h[j];l!=-1;l=ne[l])
+            {
+                int p=e[l];
+                if(d[p]>d[j]+w[l])
+                {
+                    d[p]=d[j]+w[l];
+                    cnt[p]=cnt[j]+1;
+                    if(cnt[p]>=n)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        if(flag)
+        {
+            break;
+        }
+    }
+    return flag;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    cin >> n >> m;
+    memset(h,-1,sizeof(h));
+    for(int i=1;i<=m;i++)
+    {
+        int x,y,z;
+        cin >> x >> y >> z;
+        add(x,y,z);
+    }
+    if(spfa())
+    {
+        cout << "Yes" << "\n";
+    }
+    else
+    {
+        cout << "No" << "\n";
+    }
+    return 0;
+}
