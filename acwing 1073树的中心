@@ -1,0 +1,84 @@
+#include<iostream>
+#include<cstring>
+#include<string>
+using namespace std;
+const int N = 1e5+10;
+int e[2*N],ne[2*N],h[2*N],w[2*N],idx;
+int d1[2*N],d2[2*N],pl[2*N];
+int up[2*N];
+int ans=1e9;
+void add(int a,int b,int c)
+{
+    e[idx]=b;
+    ne[idx]=h[a];
+    w[idx]=c;
+    h[a]=idx++;
+}
+int dfs_d(int u,int father)
+{
+    d1[u]=0;
+    d2[u]=0;
+    for(int i=h[u];i!=-1;i=ne[i])
+    {
+        int j=e[i];
+        if(j==father)
+        {
+            continue;
+        }
+        int d=dfs_d(j,u)+w[i];
+        if(d>d1[u])
+        {
+            d2[u]=d1[u];
+            d1[u]=d;
+            pl[u]=j;
+        }
+        else if(d>d2[u])
+        {
+            d2[u]=d;
+        }
+    }
+    //printf("u=%d d1[%d]=%d d2[%d]=%d\n",u,u,d1[u],u,d2[u]);
+    return d1[u];
+}
+void dfs_u(int u,int father)
+{
+    for(int i=h[u];i!=-1;i=ne[i])
+    {
+        int j=e[i];
+        if(j==father) continue;
+        if(pl[u]==j)
+        {
+            up[j]=max(up[u],d2[u])+w[i];
+        }
+        else{
+            up[j]=max(up[u],d1[u])+w[i];
+        }
+        //printf("u=%d up[%d]=%d up[%d]=%d\n",u,j,up[j],u,up[u]);
+        dfs_u(j,u);
+    }
+}
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    memset(h,-1,sizeof(h));
+    int n;
+    cin >> n;
+    for(int i=0;i<n-1;i++)
+    {
+        int a,b,c;
+        cin >> a >> b >> c;
+        add(a,b,c);
+        add(b,a,c);
+    }
+    dfs_d(1,-1);
+    dfs_u(1,-1);
+    for(int i=1;i<=n;i++)
+    {
+        int p = max(d1[i],up[i]);
+        ans=min(ans,p);
+    }
+    cout << ans << "\n";
+    return 0;
+}
