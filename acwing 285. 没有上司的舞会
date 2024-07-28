@@ -1,0 +1,53 @@
+#include<iostream>
+#include<cstring>
+using namespace std;
+const int N = 1e6+10;
+int e[N],ne[N],idx,w[N],h[N];
+bool father[N];
+int f[N][2];
+void add(int a,int b)//建邻接表
+{
+    e[idx]=b;
+    ne[idx]=h[a];
+    h[a]=idx++;
+}
+void dfs(int u)
+{
+    f[u][1]=w[u];
+    for(int i=h[u];i!=-1;i=ne[i])
+    {
+        int j=e[i];
+        dfs(j);
+        f[u][0]+=max(f[j][0],f[j][1]);
+        f[u][1]+=f[j][0];
+    }
+}
+int main()
+{
+    memset(father,false,sizeof(father));
+    memset(h,-1,sizeof(h));
+    int n;
+    cin >> n;
+    for(int i=0;i<n;i++)
+    {
+        int x;
+        cin >> x;
+        w[i+1]=x;//w[i+1]是i+1的快乐程度
+    }
+    for(int i=0;i<n-1;i++)
+    {
+        int a,b;
+        cin >> a >> b;
+        add(b,a);
+        father[a]=b;//a的上司是b
+    }
+    int boot=1;
+    while(father[boot])
+    {
+        //找到根节点
+        boot++;
+    }
+    dfs(boot);
+    cout << max(f[boot][0],f[boot][1]) << "\n";
+    return 0;
+}
