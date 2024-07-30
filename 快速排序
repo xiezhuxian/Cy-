@@ -1,0 +1,47 @@
+#include<iostream>
+using namespace std;
+const int N=1e6+10;
+int n;
+int a[N];
+void quicksort(int a[], int l, int r)
+{
+	if (l >= r)
+	{
+		return;
+	}
+	int t = a[(l+r)/2];
+	int x=l-1;
+	int y=r+1;
+	while (x<y)
+	{
+		do {
+			x++;
+		} while (a[x] < t);
+		do {
+			y--;
+		} while (a[y] > t);
+		if (x < y)
+		{
+			int temp;
+			temp = a[x];
+			a[x] = a[y];
+			a[y] = temp;
+		}
+	}
+	quicksort(a, l, y);
+	quicksort(a, y+1, r);
+}
+int main()
+{
+	scanf("%d", &n);
+	for (long long i = 0; i < n; i++)
+	{
+		scanf("%d", &a[i]);
+	}
+	quicksort(a, 0, n-1);
+	for (long long j = 0; j < n; j++)
+	{
+		printf("%d ", a[j]);
+	}
+	return 0;
+}
