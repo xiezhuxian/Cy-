@@ -1,0 +1,51 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+const int N = 1e6+10;
+struct AA{
+    int l,r;
+}a[N];
+bool cmp(AA a,AA b)
+{
+    if(a.l==b.l)
+    {
+        return a.r<=b.r;
+    }
+    return a.l<b.l;
+}
+int main()
+{
+    int n;
+    cin >> n;
+    for(int i=1;i<=n;i++)
+    {
+        cin >> a[i].l >> a[i].r;
+    }
+    sort(a+1,a+1+n,cmp);
+    //for(int i=1;i<=n;i++)
+    //{
+        //cout << a[i].l << " " << a[i].r << "\n";
+    //}
+    int st=a[1].l;
+    int ed=a[1].r;
+    int sum=1;
+    for(int i=2;i<=n;i++)
+    {
+        if(a[i].l<=ed)
+        {
+            if(ed<a[i].r)
+            {
+                ed=a[i].r;
+            }
+        }
+        else
+        {
+            ++sum;
+            st=a[i].l;
+            ed=a[i].r;
+        }
+    }
+    cout << sum << "\n";
+    return 0;
+}
