@@ -1,0 +1,54 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cstring>
+using namespace std;
+const int N =1e5+10;
+struct edge{
+    int v,w;
+};
+vector<edge> e[2*N];
+int d1[N];
+int d2[N];
+int ans=-1;
+void dfs(int u,int father)
+{
+    d1[u]=d2[u]=0;
+    for(auto ed: e[u])
+    {
+        int v=ed.v;
+        int w=ed.w;
+        if(v==father)
+        {
+            continue;
+        }
+        dfs(v,u);
+        int t=d1[v]+w;
+        if(t>d1[u])
+        {
+            d2[u]=d1[u];
+            d1[u]=t;
+        }
+        else if(t>d2[u])
+        {
+            d2[u]=t;
+        }
+    }
+    ans=max(ans,d1[u]+d2[u]);
+}
+int main()
+{
+    
+    int n;
+    cin >> n;
+    for(int i=0;i<n-1;i++)
+    {
+        int x,y,z;
+        cin >> x >> y >> z;
+        e[x].push_back({y,z});
+        e[y].push_back({x,z});
+    }
+    dfs(1,0);
+    cout << ans << "\n";
+    return 0;
+}
