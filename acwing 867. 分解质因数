@@ -1,0 +1,33 @@
+#include<iostream>
+#include<cmath>
+using namespace std;
+typedef long long ll;
+int main()
+{
+    int n;
+    cin >> n;
+    while(n--)
+    {
+        ll a;
+        cin >> a;
+        for(int i=2;i<=a/i;i++)
+        {
+            if(a%i==0)
+            {
+                int j=0;
+                while(a%i==0)
+                {
+                    a/=i;
+                    j++;
+                }
+                cout << i << " " << j << "\n";
+            }
+        }
+        if(a>1)
+        {
+            cout << a  << " " << "1" << "\n";
+        }
+        cout << "\n";
+    }
+    return 0;
+}
