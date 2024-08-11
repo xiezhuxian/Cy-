@@ -1,0 +1,43 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+typedef long long ll;
+const int N=1000;
+vector<int> primes(ll x)
+{
+    vector<int> q;
+    for(ll i=1;i<=x/i;i++)
+    {
+        if(x%i==0)
+        {
+            q.push_back(i);
+            if(i!=x/i)
+            {
+                q.push_back(x/i);
+            }
+        }
+    }
+    sort(q.begin(),q.end());
+    return q;
+}
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    int n;
+    cin >> n;
+    while(n--)
+    {
+        ll a;
+        cin >> a;
+        auto su=primes(a);
+        for(auto t: su)
+        {
+            cout << t << " ";
+        }
+        cout << "\n";
+    }
+    return 0;
+}
