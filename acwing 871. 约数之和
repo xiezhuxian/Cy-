@@ -1,0 +1,51 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cmath>
+#include<unordered_map>
+using namespace std;
+typedef long long ll;
+const int N=1e9+7;
+int main()
+{
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    int n;
+    unordered_map<int,int> q;
+    cin >> n;
+    while(n--)
+    {
+        ll a;
+        cin >> a;
+        for(ll i=2;i<=a/i;i++)
+        {
+            if(a%i==0)
+            {
+                while(a%i==0)
+                {
+                    q[i]++;
+                    a=a/i;
+                }
+            }
+        }
+        if(a>1)
+        {
+            q[a]++;
+        }
+    }
+    ll res=1;
+    for(auto it: q)
+    {
+        ll z=it.first;
+        ll c=it.second;
+        ll t=1;
+        while(c--)
+        {
+            t=(t*z+1)%N;
+        }
+        res=res*t%N;
+    }
+    cout << res << "\n";
+    return 0;
+}
