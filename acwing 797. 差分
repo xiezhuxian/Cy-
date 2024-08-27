@@ -1,0 +1,35 @@
+#include<iostream>
+using namespace std;
+typedef long long LL;
+const int N=1e5+10;
+int n,m;
+int a[N];
+int l[N];
+int r[N];
+int c[N];
+LL x[N];
+void chafen(int a,int b,int c)
+{
+    x[a]+=c;
+    x[b+1]-=c;
+}
+int main()
+{
+    cin >> n >> m;
+    for(int i=1;i<=n;i++)
+    {
+        cin >> a[i];
+        x[i]=a[i]-a[i-1];
+    }
+    for(int i=1;i<=m;i++)
+    {
+        cin >> l[i] >> r[i] >> c[i];
+        chafen(l[i],r[i],c[i]);
+    }
+    for(int i=1;i<=n;i++)
+    {
+        a[i]=a[i-1]+x[i];
+        cout << a[i] << " ";
+    }
+    return 0;
+}
