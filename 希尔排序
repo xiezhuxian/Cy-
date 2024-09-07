@@ -1,0 +1,50 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+void ShellSort(int* arr, int n)
+{
+	int gap = n;
+	while (gap > 1)
+	{
+		gap = gap / 3 + 1;
+		for (int i = 0; i < n - gap; i++)
+		{
+			int end = i;
+			int tmp = arr[end + gap];
+			while (end >= 0)
+			{
+				if (arr[end] > tmp)
+				{
+					arr[end + gap] = arr[end];
+					end -= gap;
+				}
+				else {
+					break;
+				}
+			}
+			arr[end + gap] = tmp;
+		}
+	}
+}
+void PrintArr(int* arr, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
+}
+int main()
+{
+	int a[] = { 5, 3, 9, 6, 2, 4, 7, 1, 8 };
+	int n = sizeof(a) / sizeof(int);
+	printf("排序前：");
+	PrintArr(a, n);
+
+	ShellSort(a,n);
+
+	printf("排序后：");
+	PrintArr(a, n);
+
+	return 0;
+}
