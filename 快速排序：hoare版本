@@ -1,0 +1,62 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+//hoare版本
+//时间复杂度O(NlogN),空间复杂度O(logN)
+int _QuickSort1(int* arr, int left, int right)
+{
+	int keyi = left;
+	++left;
+	while (left <= right)//left和right相遇的值比基准值要大
+	{
+		while (left <= right && arr[right] > arr[keyi])
+		{
+			right--;
+		}
+		while (left <= right && arr[left] < arr[keyi])
+		{
+			left++;
+		}
+		if (left <= right)
+		{
+			Swap(&arr[left++], &arr[right--]);
+		}
+	}
+	Swap(&arr[keyi], &arr[right]);
+	return right;
+}
+void QuickSort(int* arr, int left, int right)
+{
+	if (left >= right)
+	{
+		return;
+	}
+	//[left,right]-->找基准值mid
+	int mid = _QuickSort1(arr, left, right);
+	//左子序列：[left,mid-1]
+	QuickSort(arr, left, mid - 1);
+	//右子序列：[mid+1,right]
+	QuickSort(arr, mid + 1, right);
+}
+void PrintArr(int* arr, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
+}
+int main()
+{
+	int a[] = { 5, 3, 9, 6, 2, 4, 7, 1, 8 };
+	int n = sizeof(a) / sizeof(int);
+	printf("排序前：");
+	PrintArr(a, n);
+
+	QuickSort(a,0,n-1);
+
+	printf("排序后：");
+	PrintArr(a, n);
+
+	return 0;
+}
