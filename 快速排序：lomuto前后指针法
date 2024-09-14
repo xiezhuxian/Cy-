@@ -1,0 +1,56 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+//lomuto前后指针法
+//时间复杂度O(NlogN),空间复杂度O(logN)
+int _QuickSort3(int* arr, int left, int right)
+{
+	int keyi = left;
+	int prev = keyi;
+	int cur = prev + 1;
+	while (cur <= right)
+	{
+		if (arr[cur] < arr[keyi] && ++prev != cur)
+		{
+			Swap(&arr[cur], &arr[prev]);
+		}
+		cur++;
+	}
+	Swap(&arr[keyi], &arr[prev]);
+	return prev;
+}
+void QuickSort(int* arr, int left, int right)
+{
+	if (left >= right)
+	{
+		return;
+	}
+	//[left,right]-->找基准值mid
+	int mid = _QuickSort3(arr, left, right);
+	//左子序列：[left,mid-1]
+	QuickSort(arr, left, mid - 1);
+	//右子序列：[mid+1,right]
+	QuickSort(arr, mid + 1, right);
+}
+void PrintArr(int* arr, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
+}
+int main()
+{
+	int a[] = { 5, 3, 9, 6, 2, 4, 7, 1, 8 };
+	int n = sizeof(a) / sizeof(int);
+	printf("排序前：");
+	PrintArr(a, n);
+
+	QuickSort(a,0,n-1);
+
+	printf("排序后：");
+	PrintArr(a, n);
+
+	return 0;
+}
