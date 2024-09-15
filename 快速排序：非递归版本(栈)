@@ -1,0 +1,144 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<assert.h>
+#include<time.h>
+typedef int StackDataType;
+typedef struct stack {
+	StackDataType* data;
+	int size;
+	int capacity;
+}Stack;
+//非递归版本
+//时间复杂度O(NlogN),空间复杂度O(logN)
+void Swap(int* x, int* y)
+{
+	int tmp = *x;
+	*x = *y;
+	*y = tmp;
+}
+void stackInit(Stack* pst)
+{
+	assert(pst);
+	pst->data = NULL;
+	pst->capacity = pst->size = 0;
+}
+void checkCapacity(Stack* pst)
+{
+	assert(pst);
+	if (pst->capacity == pst->size)
+	{
+		int newCapacity = pst->capacity == 0 ? 4 : 2 * pst->capacity;
+		StackDataType* tmp = (StackDataType*)realloc(pst->data, newCapacity * sizeof(StackDataType));
+		if (tmp == NULL)
+		{
+			perror("realloc fail!");
+			exit(1);
+		}
+		pst->data = tmp;
+		pst->capacity = newCapacity;
+	}
+}
+int stackIsEmpty(Stack* pst)
+{
+	assert(pst);
+	if (pst->size == 0)
+	{
+		return 1;
+	}
+	return 0;
+}
+void stackPush(Stack* pst, StackDataType x)
+{
+	assert(pst);
+	checkCapacity(pst);
+	pst->data[pst->size] = x;
+	pst->size++;
+}
+void stackPop(Stack* pst)
+{
+	assert(pst);
+	assert(!stackIsEmpty(pst));
+	pst->size--;
+}
+StackDataType stackTop(Stack* pst)
+{
+	assert(pst);
+	assert(!stackIsEmpty(pst));
+	int pp = pst->size - 1;
+	return pst->data[pp];
+}
+int stackSize(Stack* pst)
+{
+	assert(pst);
+	return pst->size;
+}
+void satckDestroy(Stack* pst)
+{
+	assert(pst);
+	//assert(!stackIsEmpty(pst));
+	free(pst->data);
+	pst->capacity = pst->size = 0;
+}
+void QuickSortNonR(int* arr, int left, int right)
+{
+	Stack st;
+	stackInit(&st);
+	stackPush(&st, right);
+	stackPush(&st, left);
+	while (!stackIsEmpty(&st))
+	{
+		int begin = stackTop(&st);
+		stackPop(&st);
+		int end = stackTop(&st);
+		stackPop(&st);
+		int prev = begin;
+		int cur = prev + 1;
+		int keyi = begin;
+		while (cur <= end)
+		{
+			if (arr[cur] < arr[keyi] && ++prev != cur)
+			{
+				Swap(&arr[cur], &arr[prev]);
+			}
+			cur++;
+		}
+		Swap(&arr[keyi], &arr[prev]);
+		keyi = prev;
+		//根据基准值划分左右区间
+		//左区间：[begin,keyi-1]
+		//右区间：[keyi+1,end]
+		if (keyi + 1 < end)
+		{
+			stackPush(&st, end);
+			stackPush(&st, keyi + 1);
+		}
+		if (begin < keyi - 1)
+		{
+			stackPush(&st, keyi-1);
+			stackPush(&st, begin);
+		}
+	}
+	satckDestroy(&st);
+}
+void PrintArr(int* arr, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("%d ", arr[i]);
+	}
+	printf("\n");
+}
+int main()
+{
+	int a[] = { 5, 3, 9, 6, 2, 4, 7, 1, 8 };
+	int n = sizeof(a) / sizeof(int);
+	printf("排序前：");
+	PrintArr(a, n);
+
+	QuickSortNonR(a,0,n-1);
+
+	printf("排序后：");
+	PrintArr(a, n);
+
+	return 0;
+}
