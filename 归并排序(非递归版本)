@@ -1,0 +1,75 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>
+#include<memory.h>
+int a[100010];
+void MergeSortNonR1(int* arr, int n)
+{
+	//创建新数组tmp
+	int* tmp = (int*)malloc(sizeof(int) * n);
+	if (tmp == NULL)
+	{
+		perror("malloc fail!");
+		exit(-1);
+	}
+	int gap = 1;//根据gap进行分组
+	while (gap < n)
+	{
+		for (int i = 0; i < n; i += 2 * gap)
+		{
+			//将区间保存
+			int begin1 = i, end1 = i + gap - 1;
+			int begin2 = i + gap, end2 = i + 2 * gap - 1;
+			int j = i;
+			//end1和begin2越界直接跳出循环
+			if (end1 >= n || begin2 >= n)
+			{
+				break;
+			}
+			//end2越界可以修正
+			if (end2 >= n)
+			{
+				end2 = n - 1;
+			}
+			while (begin1 <= end1 && begin2 <= end2)
+			{
+				if (arr[begin1] < arr[begin2])
+				{
+					tmp[j++] = arr[begin1++];
+				}
+				else
+				{
+					tmp[j++] = arr[begin2++];
+				}
+			}
+			while (begin1 <= end1)
+			{
+				tmp[j++] = arr[begin1++];
+			}
+			while (begin2 <= end2)
+			{
+				tmp[j++] = arr[begin2++];
+			}
+			//归并一组，拷贝一组
+			memcpy(arr + i, tmp + i, sizeof(int) * (end2 - i + 1));
+		}
+		gap *= 2;
+	}
+	free(tmp);
+	tmp = NULL;
+}
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    for(int i=0;i<n;i++)
+    {
+        scanf("%d",&a[i]);
+    }
+    MergeSortNonR1(a,n);
+    for(int i=0;i<n;i++)
+    {
+        printf("%d ",a[i]);
+    }
+    return 0;
+}
